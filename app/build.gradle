@@ -9,8 +9,20 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     id 'application'
+    id 'java'
 }
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
+sourceSets {
+  main {
+    resources {
+      srcDirs = ["src/main/java/assets/imgs"]
+      includes = ["assets/imgs/**/*.png"]
+
+        }
+    }
+}
 
 repositories {
     // Use Maven Central for resolving dependencies.
@@ -29,8 +41,17 @@ application {
     // Define the main class for the application.
     mainClass = 'com.game.main.Main'
 }
+
 tasks.register('hello') {
     doLast {
         println 'Hello world!'
     }
+}
+jar {
+  manifest {
+    attributes(
+      'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+      'Main-Class': 'com.game.main.Main'
+    )
+  }
 }
